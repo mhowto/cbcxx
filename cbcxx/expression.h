@@ -1,5 +1,5 @@
-#ifndef CBCXX_EXPRESSION_HPP
-#define CBCXX_EXPRESSION_HPP
+#ifndef CBCXX_EXPRESSION_H
+#define CBCXX_EXPRESSION_H
 
 #include <boost/spirit/home/x3.hpp>
 #include "ast.h"
@@ -14,6 +14,9 @@ namespace client {
     }
 
     parser::expression_type const& expression();
+
+    BOOST_SPIRIT_DEFINE()
+
 }
 
 

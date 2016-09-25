@@ -24,9 +24,18 @@
     <ClInclude Include="expression.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ast_adapted.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="expression_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="expression.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
