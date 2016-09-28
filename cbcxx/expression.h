@@ -14,9 +14,6 @@ namespace client {
     }
 
     parser::expression_type const& expression();
-
-    BOOST_SPIRIT_DEFINE()
-
 }
 
 

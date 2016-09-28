@@ -125,11 +125,11 @@ namespace client {
             op_add_equal,          // a += 1
             op_minus_equal,        // a -= 1
             op_multiply_equal,     // a *= 1
-            op_divide_euqal,       // a /= 1
+            op_divide_equal,       // a /= 1
             op_mod_equal,          // a %= 1
             op_and_equal,          // a &= 0x1
             op_or_equal,           // a |= 0x1
-            op_xor_euqal,          // a ^= 0x1
+            op_xor_equal,          // a ^= 0x1
             op_shift_left_equal,   // a <<= 1
             op_shift_right_equal   // a >>= 1
         };
