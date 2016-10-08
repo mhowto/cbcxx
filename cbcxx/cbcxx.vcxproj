@@ -120,14 +120,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ast.h" />
-    <ClInclude Include="ast_adapted.h" />
+    <ClInclude Include="encoding.h" />
     <ClInclude Include="expression.h" />
-    <ClInclude Include="expression_def.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="scanner.h" />
+    <ClInclude Include="token.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="expression.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="scanner.cpp" />
+    <ClCompile Include="token.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

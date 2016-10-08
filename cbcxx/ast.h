@@ -1,16 +1,11 @@
 #ifndef CBCXX_AST_H
 #define CBCXX_AST_H
 
-#include <boost/spirit/home/x3/support/ast/variant.hpp>
-#include <boost/spirit/home/x3/support/ast/position_tagged.hpp>
-#include <boost/optional/optional.hpp>
 #include <list>
 #include <string>
 
-namespace client {
+namespace cbcxx {
     namespace ast {
-        namespace x3 = boost::spirit::x3;
-
         struct expression;
         struct assign_expr;
         struct opassign_expr;
