@@ -7,7 +7,7 @@
 namespace cbcxx {namespace scanner {
     class Scanner {
     public:
-        Scanner()  {}
+        //Scanner(std::string* text) : Scanner(text, "literal") {}
         explicit Scanner(
             std::string* text,
             std::string fileName="",
@@ -26,7 +26,9 @@ namespace cbcxx {namespace scanner {
         bool Test(int c); // 不会改变状态
         bool Empty();
         void PutBack(); // 对Try做的回退一步
+        void Mark();
 
+        void SkipWhiteSpace();
         void SkipComment();
         Token* SkipNumber(); // 抓取数字 
         Token* SkipIdentifier();

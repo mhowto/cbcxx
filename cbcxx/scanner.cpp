@@ -5,18 +5,21 @@ namespace cbcxx { namespace scanner {
     void Scanner::Tokenize(TokenSequence& ts) {
         while (true) {
             Token* t = Scan();
-            if (t->tag_ == Token::END)
-            {
+            if (t->tag_ == Token::END) {
                 break;
             }
-            else
-            {
+            else {
                 ts.InsertBack(t);
             }
         }
     }
 
     Token* Scanner::Scan(bool ws) {
+        tok_.ws_ = ws;
+        SkipWhiteSpace();
+
+        Mark();
+
         int c = Next();
         if ((c >= 'a' && c <= 't') || (c >= 'v' && c <= 'z') ||
             (c >= 'A' && c <= 'K') || (c >= 'M' && c <= 'T') || (c >= 'V' && c <= 'Z') ||
@@ -90,6 +93,12 @@ namespace cbcxx { namespace scanner {
                 return MakeToken('#');
             }
             return MakeToken(c);
+        case '#':
+            return (Try('#') ? MakeToken(Token::DSHARP) : MakeToken('#'));
+        case '"':
+            return MakeToken('"');
+        case '\'':
+            return MakeToken('\'');
         case '0': case '1': case '2': case '3': case '4':
         case '5': case '6': case '7': case '8': case '9':
             return SkipNumber();
@@ -101,7 +110,7 @@ namespace cbcxx { namespace scanner {
         }
         case '\\':
             if (Test('u') || Test('U'))
-                return SkipIdentifer();
+                return SkipIdentifier();
             return MakeToken(Token::INVALID);
         case '\0': return MakeToken(Token::END);
         default: return MakeToken(Token::INVALID);
@@ -137,7 +146,11 @@ namespace cbcxx { namespace scanner {
     }
 
     bool Scanner::Try(int c) {
-
+        if (Peek() != c) {
+            return false;
+        }
+        Next();
+        return true;
     }
 
     bool Scanner::Test(int c) {
@@ -148,12 +161,31 @@ namespace cbcxx { namespace scanner {
         return *p_ == 0;
     }
 
+    void Scanner::PutBack() {
+        int c = *--p_;
+        if (c == '\n' && p_[-1] == '\\') {
+            --loc_.line;
+            --p_;
+            return PutBack();
+        }
+        else if (c == '\n') {
+            --loc_.line;
+        }
+        else {
+            --loc_.column;
+        }
+    }
+
+    void Scanner::Mark() {
+        tok_.loc_ = loc_;
+    }
+
     Token* Scanner::MakeToken(int tag) {
         tok_.tag_ = tag;
         auto& str = tok_.raw_;
         str.resize(0);
         const char* p = tok_.loc_.lineBegin + tok_.loc_.column - 1;
-        for (; p != p; p++) {
+        for (; p != p_; p++) {
             if (p[0] == '\n' && p[-1] == '\\') {
                 str.pop_back();
             }
@@ -161,8 +193,16 @@ namespace cbcxx { namespace scanner {
                 str.push_back(*p);
             }
         }
-        
         return Token::New(tok_);
+    }
+
+    void Scanner::SkipWhiteSpace() {
+        int c = Peek();
+        while (isspace(c) && c != '\n') {
+            tok_.ws_ = true;
+            Next();
+            c = Peek();
+        }
     }
 
     void Scanner::SkipComment() {
@@ -187,12 +227,13 @@ namespace cbcxx { namespace scanner {
     }
 
     Token* Scanner::SkipNumber() {
+        PutBack();
         bool sawHexPrefix = false;
         int c = Next();
         int tag = Token::I_CONSTANT;
         while ((c == '.') || isdigit(c) || isUCN(c) || isalpha(c) || c == '_') {
             if (c == 'e' || c == 'E' || c == 'p' || c == 'P') {
-                // P(C11 C++17)є¬Те: 0x1.99p-3 = 0b1.10011001 *2 ^ -3 
+                // P(C11 C++17)є¬Те: 0xa.99p-3 = 0b1010.10011001 *2 ^ -3 
                 if (!Try('-')) Try('+');
                 if (sawHexPrefix && (c == 'p' || c == 'P')) {
                     tag = Token::F_CONSTANT;
@@ -209,7 +250,8 @@ namespace cbcxx { namespace scanner {
             }
             c = Next();
         }
-        return Token::New(tok_);
+        PutBack();
+        return MakeToken(tag); 
     }
 
     int Scanner::ScanEscaped() {
@@ -269,7 +311,7 @@ namespace cbcxx { namespace scanner {
         Next();
 
         c = Peek();
-        if (!isOctal)
+        if (!isOctal(c))
             return val;
         val = (val << 3) + XDigit(c);
         Next();
@@ -290,7 +332,7 @@ namespace cbcxx { namespace scanner {
         return c;
     }
 
-    int Scanner::isOctal(int c) {
+    bool Scanner::isOctal(int c) {
         return (c >= '0' && c <= '7');
     }
 
