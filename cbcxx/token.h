@@ -225,8 +225,6 @@ namespace cbcxx { namespace scanner {
         friend std::ostream& operator<<(std::ostream& os, const TokenSequence& ts);
         friend class Preprocessor;
     public:
-        const TokenSequence& operator=(const TokenSequence& other);
-
         TokenSequence(): tokList_(new TokenList()),  begin_(tokList_->begin()), end_(tokList_->end()) {}
 
         explicit TokenSequence(Token* tok) {
@@ -243,6 +241,7 @@ namespace cbcxx { namespace scanner {
             tokList_ = other.tokList_;
             begin_ = other.begin_;
             end_ = other.end_;
+            return *this;
         }
 
         ~TokenSequence() {}

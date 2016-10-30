@@ -13,7 +13,7 @@ namespace cbcxx {
             return new Token(tag);
         }
 
-        Token* Token::New(int tag, const SourceLocation& loc, const std::string& str, bool ws = false) {
+        Token* Token::New(int tag, const SourceLocation& loc, const std::string& str, bool ws) {
             return new Token(tag, str, loc, ws);
         }
 
@@ -148,7 +148,7 @@ namespace cbcxx {
                 // __func__: 参考 6.4.2.2, 替换成当前函数名
                 auto funcName = Token::New(*(*begin_));
                 funcName->tag_ = Token::LITERAL;
-                funcName->raw_ = "\"" + parser_->CurFunc()->Name() + "\"";
+                //funcName->raw_ = "\"" + parser_->CurFunc()->Name() + "\"";
                 *begin_ = funcName;
             }
             return *begin_;
@@ -286,7 +286,7 @@ namespace cbcxx {
         }
 
         std::ostream& operator<<(std::ostream & os, const TokenSequence & ts) {
-            for (auto& t : ts.tokList_) {
+            for (auto& t : *ts.tokList_) {
                 os << *t << " ";
             }
 

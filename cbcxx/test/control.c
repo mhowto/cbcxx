@@ -1,32 +1,3 @@
-#include <iostream>
-#include "token.h"
-#include "scanner.h"
-#include "parser.h"
-
-using cbcxx::scanner::Scanner;
-using cbcxx::scanner::TokenSequence;
-using cbcxx::parser::Parser;
-
-int main() {
-    //std::string input("int i = a + b * 2");
-    /*
-    const char* input = R"(
-#include <stdio.h>
-struct AB {
-  int a;
-  char b;
-}
-AB a;
-
-// some comments
-
-void dosome(unsigned c) {
-    c += 1;
-    return 
-})";
-    */
-
-    const char* input = R"(
 // Copyright 2012 Rui Ueyama. Released under the MIT license.
 // @wgtdkp: passed
 
@@ -317,19 +288,4 @@ int main() {
     //test_computed_goto();
     test_logor();
     return 0;
-}
-
-
-)";
-
-    std::string inputStr(input);
-
-    Scanner scanner(&inputStr);
-    TokenSequence ts;
-    scanner.Tokenize(ts);
-
-    std::cout << ts;
-    std::cin.get();
-
-
 }

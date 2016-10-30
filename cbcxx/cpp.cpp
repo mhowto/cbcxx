@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <cassert>
 
-extern std::string inFileName;
+//extern std::string inFileName;
 
 namespace cbcxx {
     namespace preprocessor {
@@ -66,7 +66,7 @@ namespace cbcxx {
          */
         void Preprocessor::Process(TokenSequence& os) {
             TokenSequence is;
-            IncludeFile(is, inFileName);
+            //IncludeFile(is, inFileName);
             
             auto defaultIncludeFile = SearchFile("cbcxx.h", true, false);
             assert(defaultIncludeFile != nullptr);
@@ -84,13 +84,11 @@ namespace cbcxx {
         {
             while (!is.Empty()) {
                 auto tok = is.Peek();
-                if (tok.Is)
-
             }
         }
 
 
-        void Preprocessor::Finalize(TokenSequence os)
+        void Preprocessor::Finalize(TokenSequence& os)
         {
         }
 
@@ -101,11 +99,11 @@ namespace cbcxx {
          * @param next true for #include_next semantic, false for #include semantic
          * @param curPath current path
          */
-        const std::string* SearchFile(
+        const std::string* Preprocessor::SearchFile(
             const std::string& fileName, 
             bool libHeader, 
             bool next, 
-            const std::string* curPath=nullptr)
+            const std::string* curPath)
         {
             return nullptr;
         }
